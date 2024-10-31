@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     libbrotli-dev \
     libz-dev \
     libpcre3-dev \
+    libicu-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Agregamos el repositorio de PHP
@@ -36,6 +37,7 @@ RUN apt-get update && apt-get install -y \
     php8.2-xml \
     php8.2-bcmath \
     php8.2-dev \
+    php8.2-intl \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalamos Swoole deshabilitando brotli
