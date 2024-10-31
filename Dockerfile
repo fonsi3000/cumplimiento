@@ -12,9 +12,14 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     lsb-release \
     apt-transport-https \
-    unzip
+    unzip \
+    pkg-config \
+    libbrotli-dev \
+    libz-dev \
+    libpcre3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Agregamos el repositorio de PHP correctamente
+# Agregamos el repositorio de PHP
 RUN add-apt-repository ppa:ondrej/php -y
 
 # Actualizamos e instalamos PHP y MySQL
@@ -31,12 +36,12 @@ RUN apt-get update && apt-get install -y \
     php8.2-xml \
     php8.2-bcmath \
     php8.2-dev \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalamos Swoole
-RUN pecl install swoole \
-    && echo "extension=swoole.so" > /etc/php/8.2/cli/conf.d/swoole.ini
+# Instalamos Swoole deshabilitando brotli
+RUN pecl channel-update pecl.php.net && \
+    pecl install --configureoptions 'enable-brotli="no"' swoole && \
+    echo "extension=swoole.so" > /etc/php/8.2/cli/conf.d/swoole.ini
 
 # Instalamos Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
